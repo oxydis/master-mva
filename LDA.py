@@ -34,7 +34,6 @@ def plot_figure(piML, mu0ML, mu1ML, sigmaML, trainX, trainY ):
 	levels=[3]
 	mat=(mu0ML-mu1ML).dot(invsig)
 	const = .5*mu0ML.dot(invsig).dot(mu0ML)-.5*mu1ML.dot(invsig).dot(mu1ML)-np.log(piML/(1-piML))
-	#Faire une boucle sur les plages 2x1  dans le mesh pour avoir le bon tableau
 	line = -(mat[0]*gX0 + const)/mat[1]
 	plt.title("Classification with LDA")
 	plt.plot(gX0, line, label="LDA")
