@@ -23,7 +23,7 @@ Variables:
 
 In the notes:
     q: latent variable (cluster)
-    u: observations 
+    u: observations
     alpha_t: forward joint probability p(q_t, u_1..t)
     beta_t: backward conditional probability p(u_T..t+1|q_t)
     gamma_t: total conditional probabity p(q_t|u_1..T)
@@ -113,17 +113,17 @@ def viterbi(p, A, mu, sigma, data):
     log_condi_p = np.array([multivariate_normal.logpdf(data[0], mu[i], sigma[i]) for i in range(K)])
     log_v[:, 0] = np.log(p) + log_condi_p
     for k in range(K):
-        path[k]=[k]
+        path[k] = [k]
     # Propagation of the algorithm
     for t in range(1, T):
-        newpath={}
+        newpath = {}
         log_condi_p = (np.array([multivariate_normal.logpdf(data[t], mu[i], sigma[i]) for i in range(K)]))
         for k in range(K):
             # V(t,k) = max_x P(y_t | k) a(x,k) V(t-1, x)
             (log_v[k,t], state) = max((log_condi_p[k] + np.log(A[s,k]) + log_v[s, t-1], s) for s in range(K))
             newpath[k] = path[state]+[k]
         path = newpath
-    (prob, state) = max((log_v[k, -1], k) for k in range(K))
+    (_, state) = max((log_v[k, -1], k) for k in range(K))
     return np.array(path[state])
 
 # Maximization step
@@ -276,4 +276,3 @@ if __name__ == '__main__':
     mar_pred_test = np.argmax(gamma_test, axis=0)
     # Plot most probable states comparison
     compare_states(vit_pred_train, mar_pred_train, vit_pred_test, mar_pred_test, N)
-
